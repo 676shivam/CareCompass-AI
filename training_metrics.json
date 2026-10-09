@@ -1,0 +1,7 @@
+{
+  "random_stratified_holdout_accuracy": 1.0,
+  "holdout_rows": 984,
+  "disease_classes": 41,
+  "unique_symptom_features": 131,
+  "note": "This metric may be inflated by symptom-permutation rows and is not clinical validation."
+}
