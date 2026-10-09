@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b766e">
+<title>CareCompass AI | Symptom & Care Guide</title>
+<style>
+:root{
+ --brand:#0b766e;--brand-dark:#075c57;--brand-soft:#e7f6f2;--ink:#172f3b;--muted:#637782;
+ --line:#e1e9ec;--paper:#ffffff;--canvas:#f5f8f9;--gold:#b66b18;--gold-bg:#fff5e8;
+ --red:#a72c32;--red-bg:#fff0f0;--blue:#365f91;--blue-bg:#edf4ff;--shadow:0 14px 38px rgba(18,48,59,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--canvas);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.top-strip{background:#073f3e;color:#e8f7f4;padding:8px 5%;font-size:12px;text-align:center;letter-spacing:.15px}
+.site-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{max-width:1240px;margin:auto;min-height:74px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.5px;font-size:21px;color:var(--ink);white-space:nowrap}
+.brand-mark{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;background:var(--brand);color:white;box-shadow:0 6px 15px #0b766e2b}
+.brand small{display:block;font-size:10px;letter-spacing:1.6px;color:var(--muted);font-weight:750;margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:25px;font-size:13px;font-weight:650;color:#415863}
+.nav-links a{color:inherit}.nav-cta{padding:11px 15px;border-radius:10px;background:var(--brand);color:#fff!important}
+.hero{position:relative;overflow:hidden;background:linear-gradient(112deg,#eaf7f3 0%,#f2f8fb 53%,#eaf0fb 100%);border-bottom:1px solid #e1ecec}
+.hero:after{content:"";position:absolute;width:380px;height:380px;border:1px solid #0b766e1c;border-radius:50%;right:-85px;top:-155px;box-shadow:0 0 0 45px #0b766e08,0 0 0 95px #0b766e05;pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:1240px;margin:auto;padding:61px 24px 56px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:55px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:850;letter-spacing:1.5px;color:var(--brand);text-transform:uppercase}
+.eyebrow-dot{width:7px;height:7px;border-radius:50%;background:#31a88f;box-shadow:0 0 0 4px #31a88f20}
+h1{font-size:clamp(35px,4.5vw,57px);line-height:1.07;letter-spacing:-2.3px;color:#12313b;margin:18px 0 18px;max-width:740px}
+.hero-copy{font-size:16px;line-height:1.8;color:#536d77;max-width:670px;margin:0}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:27px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;border-radius:11px;padding:13px 17px;font-size:13px;font-weight:800;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px);text-decoration:none}.btn-primary{background:var(--brand);color:white;box-shadow:0 8px 18px #0b766e25}.btn-primary:hover{background:var(--brand-dark)}
+.btn-light{background:white;color:var(--ink);border-color:#dce7e8}.btn-small{padding:9px 12px;font-size:12px}
+.trust-row{display:flex;flex-wrap:wrap;gap:18px;margin-top:25px;color:#58717a;font-size:12px;font-weight:650}.trust-row span{display:flex;gap:7px;align-items:center}
+.hero-panel{background:rgba(255,255,255,.8);border:1px solid #ffffff;border-radius:23px;padding:23px;box-shadow:0 22px 55px #244e5614;backdrop-filter:blur(10px)}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}.panel-top strong{font-size:14px}.live-pill{font-size:10px;font-weight:800;background:#e7f7ee;color:#28794d;padding:7px 9px;border-radius:99px;white-space:nowrap}
+.health-illustration{height:130px;border-radius:16px;background:linear-gradient(135deg,#e1f6ef,#e9f0ff);display:grid;place-items:center;position:relative;overflow:hidden;margin-bottom:18px}
+.health-illustration svg{width:112px;height:112px;filter:drop-shadow(0 8px 10px #0b766e17)}
+.mini-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini-stat{padding:12px;border:1px solid var(--line);background:#fff;border-radius:12px}.mini-stat b{display:block;font-size:13px;margin-bottom:4px}.mini-stat span{font-size:11px;color:var(--muted);line-height:1.4}
+.container{max-width:1240px;margin:auto;padding:37px 24px 58px}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:0 0 18px}.section-heading h2{font-size:25px;letter-spacing:-.65px;margin:0 0 7px}.section-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.section-kicker{font-size:10px;font-weight:850;letter-spacing:1.5px;color:var(--brand);text-transform:uppercase;margin-bottom:9px}
+.main-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(285px,.72fr);gap:22px;align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}.card-pad{padding:25px}
+.card-title-row{display:flex;align-items:flex-start;gap:13px;margin-bottom:9px}.icon-box{flex:0 0 43px;width:43px;height:43px;border-radius:13px;background:var(--brand-soft);display:grid;place-items:center;color:var(--brand)}.icon-box svg{width:21px;height:21px}.card-title-row h3{font-size:18px;letter-spacing:-.3px;margin:1px 0 5px}.card-title-row p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.form-section{padding-top:17px;margin-top:17px;border-top:1px solid #edf1f2}.form-section:first-of-type{border-top:0;padding-top:5px;margin-top:14px}.field-label{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 8px;font-size:12px;font-weight:800;color:#304b56}.field-label .optional{font-size:10px;color:#8999a0;font-weight:650}
+input[type=text],input[type=search],select,textarea{width:100%;padding:12px 13px;border:1px solid #d7e2e5;border-radius:10px;background:#fff;color:var(--ink);font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:#5ba99f;box-shadow:0 0 0 3px #0b766e12}textarea{min-height:85px;resize:vertical;line-height:1.55}
+.field-help{font-size:11px;color:#7c8c93;line-height:1.55;margin:7px 0 0}.search-wrap{position:relative}.search-wrap svg{position:absolute;left:12px;top:12px;width:17px;height:17px;color:#7b8e95}.search-wrap input{padding-left:38px}
+.symptom-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px;max-height:260px;overflow:auto;border:1px solid #e6edef;padding:10px;border-radius:12px;background:#fbfdfd}
+.symptom-option{display:flex;align-items:flex-start;gap:9px;padding:9px;border-radius:9px;font-size:12px;line-height:1.35;color:#3f5660;cursor:pointer;margin:0;border:1px solid transparent}.symptom-option:hover{background:#eef8f5}.symptom-option input{width:15px;height:15px;flex:0 0 15px;margin:1px 0 0;accent-color:var(--brand)}.symptom-option:has(input:checked){background:#e9f7f3;border-color:#b8e1d7;color:#075e57;font-weight:750}
+.form-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.submit-row{display:flex;gap:12px;align-items:center;margin-top:22px}.submit-row .btn{flex:1}.submit-note{font-size:10px;color:#7d8c92;line-height:1.45;max-width:150px}
+.side-stack{display:grid;gap:17px}.safety-card{padding:21px;background:#fff;border-color:#f1d9d5}.side-heading{display:flex;gap:11px;align-items:center;margin-bottom:13px}.side-icon{height:37px;width:37px;display:grid;place-items:center;border-radius:11px;background:var(--red-bg);color:var(--red);font-size:17px}.side-heading h3{font-size:15px;margin:0}.side-copy{font-size:12px;line-height:1.75;color:#657780;margin:0}.emergency-call{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;background:#fff4f2;border:1px solid #f4d5d0;border-radius:12px;margin-top:14px}.emergency-call b{display:block;color:#9b292e;font-size:13px}.emergency-call span{display:block;color:#916d6d;font-size:10px;margin-top:3px}.call-button{padding:9px 11px;background:#a72c32;color:#fff;border-radius:9px;font-size:12px;font-weight:850;white-space:nowrap}
+.info-card{padding:21px}.info-list{display:grid;gap:13px;margin-top:15px}.info-item{display:grid;grid-template-columns:28px 1fr;gap:10px}.info-check{width:27px;height:27px;border-radius:9px;background:var(--brand-soft);display:grid;place-items:center;color:var(--brand);font-size:13px;font-weight:900}.info-item b{display:block;font-size:12px;margin:1px 0 4px}.info-item p{font-size:11px;line-height:1.55;color:var(--muted);margin:0}
+.results{display:none;margin-top:25px;padding-top:23px;border-top:1px solid var(--line)}.results-head{display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:15px}.results-head h3{font-size:20px;letter-spacing:-.5px;margin:0 0 6px}.results-head p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}.status-chip{display:inline-flex;align-items:center;gap:6px;background:#eff8f5;color:#237365;padding:7px 9px;border-radius:99px;font-size:10px;font-weight:850;white-space:nowrap}
+.notice{border-radius:12px;padding:14px 15px;line-height:1.65;font-size:12px;margin:12px 0}.warning{background:var(--gold-bg);color:#80501d;border:1px solid #f0dbba}.danger{background:var(--red-bg);color:#8d252b;border:1px solid #f0c9cb}.safe{background:#edf8f4;color:#235f55;border:1px solid #d6eee5}.notice b{font-size:12px}.notice p{margin:8px 0 0}.tag{display:inline-block;background:#eaf2f4;color:#405a65;border-radius:7px;padding:6px 8px;margin:4px 4px 0 0;font-size:10px;font-weight:700}
+.condition{border:1px solid var(--line);border-radius:14px;padding:17px;margin:12px 0;background:#fff}.condition h4{font-size:16px;margin:0 0 7px}.condition p{font-size:12px;line-height:1.7;color:#536a74}.condition p b{color:#2e4650}.score-line{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px;color:#73858c}.scorebar{height:6px;background:#e8eff0;border-radius:99px;overflow:hidden;margin:8px 0 12px}.scorebar span{display:block;height:100%;background:linear-gradient(90deg,#0b766e,#54b99e);border-radius:99px}.subpanel{background:#f7fafb;border:1px solid #e9eff0;border-radius:11px;padding:12px;margin-top:12px}.subpanel-title{font-size:11px;font-weight:850;color:#244650;display:flex;align-items:center;gap:7px;margin-bottom:7px}.subpanel p{margin:6px 0}.subpanel.ayurveda{background:#f4f8ef;border-color:#e1ebd5}.subpanel.ayurveda .subpanel-title{color:#426b36}.subpanel.ayurveda a{font-size:11px;font-weight:750}
+.subpanel.diet{background:#f0f7ff;border-color:#d9e8f7}.subpanel.diet .subpanel-title{color:#285b86}.subpanel.diet p{line-height:1.65}
+.result-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:17px}.result-actions .btn{font-size:12px}.results-disclaimer{font-size:10px;line-height:1.7;color:#7c8d94;margin-top:14px}
+.directory{margin-top:45px}.directory-header{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}.directory-header h2{font-size:26px;letter-spacing:-.7px;margin:0 0 7px}.directory-header p{font-size:13px;line-height:1.6;color:var(--muted);margin:0;max-width:660px}.area-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.area-card{padding:18px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:0 6px 22px #163d4805}.area-label{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:var(--brand);font-weight:850}.area-card h3{font-size:15px;margin:9px 0 7px}.area-card p{font-size:11px;color:var(--muted);line-height:1.6;margin:0 0 13px}.area-links{display:flex;flex-wrap:wrap;gap:7px}.area-links a{font-size:11px;font-weight:750;padding:8px 9px;background:#eff7f5;border-radius:8px}.directory-note{margin-top:12px;color:#7b8c92;font-size:10px;line-height:1.6}
+.bottom-banner{margin-top:32px;padding:23px 25px;border-radius:18px;background:linear-gradient(110deg,#0a5d59,#0d8275);color:white;display:flex;justify-content:space-between;align-items:center;gap:25px}.bottom-banner h3{font-size:18px;margin:0 0 7px}.bottom-banner p{font-size:12px;line-height:1.6;color:#d6efea;margin:0;max-width:700px}.bottom-banner .btn{background:#fff;color:#075e57;white-space:nowrap}
+footer{background:#fff;border-top:1px solid var(--line);padding:28px 24px;color:#6f8188}.footer-inner{max-width:1240px;margin:auto;display:flex;justify-content:space-between;gap:24px;align-items:start}.footer-brand{font-size:14px;font-weight:850;color:var(--ink)}.footer-copy{max-width:680px;text-align:right;font-size:10px;line-height:1.8}
+#loadingState{display:none;margin-top:14px;padding:12px;background:#f2f8f8;border-radius:10px;font-size:12px;color:var(--brand)}
+@media(max-width:980px){.hero-inner{gap:28px}.main-grid{grid-template-columns:minmax(0,1fr) 285px}.nav-links{gap:14px}.area-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:780px){.nav{min-height:66px;padding:0 17px}.nav-links a:not(.nav-cta){display:none}.hero-inner{grid-template-columns:1fr;padding:43px 20px 36px;gap:26px}.hero-panel{max-width:460px}.container{padding:27px 15px 42px}.main-grid{grid-template-columns:1fr}.side-stack{grid-template-columns:1fr 1fr}.section-heading h2,.directory-header h2{font-size:22px}.area-grid{grid-template-columns:1fr 1fr}.footer-inner{display:block}.footer-copy{text-align:left;margin-top:12px}.bottom-banner{align-items:start;flex-direction:column}}
+@media(max-width:540px){h1{letter-spacing:-1.4px}.hero-copy{font-size:14px}.trust-row{gap:11px}.card-pad{padding:18px}.symptom-list{grid-template-columns:1fr;max-height:230px}.form-two{grid-template-columns:1fr;gap:0}.submit-row{display:block}.submit-note{max-width:none;margin-top:9px}.side-stack{grid-template-columns:1fr}.area-grid{grid-template-columns:1fr}.directory-header,.section-heading{display:block}.directory-header .status-chip{margin-top:12px}.results-head{display:block}.results-head .status-chip{margin-top:10px}.nav-cta{padding:9px 10px;font-size:11px}.brand{font-size:18px}.brand-mark{width:35px;height:35px}}
+</style>
+</head>
+<body>
+<div class="top-strip">A patient education project · Not a medical diagnosis service · In an emergency, call 112</div>
+<header class="site-header">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#top" aria-label="CareCompass AI home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="23" height="23" fill="none"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7V3Z" fill="currentColor"/></svg></span>
+      <span>CareCompass <small>HEALTHCARE AI</small></span>
+    </a>
+    <div class="nav-links">
+      <a href="#checker">Symptom checker</a><a href="#how-it-works">How it works</a><a href="#local-care">Local care</a>
+      <a class="nav-cta" href="#checker">Start a check&nbsp; ↗</a>
+    </div>
+  </nav>
+</header>
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> A clearer next step for your health</div>
+      <h1>Understand your symptoms.<br>Make informed next steps.</h1>
+      <p class="hero-copy">Explore possible matches from a symptom dataset, learn which type of healthcare professional may help, and read cautious activity and Ayurveda information with safety in mind.</p>
+      <div class="hero-actions"><a class="btn btn-primary" href="#checker">Start symptom check <span aria-hidden="true">→</span></a><a class="btn btn-light" href="#local-care">Explore local care</a></div>
+      <div class="trust-row"><span>✓ Private in this demo session</span><span>✓ Evidence-aware information</span><span>✓ Emergency guidance</span></div>
+    </div>
+    <div class="hero-panel" aria-label="Health guidance overview">
+      <div class="panel-top"><strong>Your health, one step at a time</strong><span class="live-pill">EDUCATIONAL TOOL</span></div>
+      <div class="health-illustration">
+        <svg viewBox="0 0 140 140" fill="none" aria-hidden="true"><circle cx="70" cy="70" r="54" fill="#fff" opacity=".8"/><path d="M70 27c-16 0-29 13-29 29v6c0 5-4 9-9 9h-4v16h10c8 0 14-6 14-14V56c0-10 8-18 18-18s18 8 18 18v17c0 8 6 14 14 14h10V71h-4c-5 0-9-4-9-9v-6c0-16-13-29-29-29Z" fill="#0b766e" opacity=".14"/><rect x="53" y="43" width="34" height="56" rx="9" fill="#0b766e"/><rect x="62" y="34" width="16" height="74" rx="6" fill="#0b766e"/><rect x="44" y="54" width="52" height="34" rx="6" fill="#0b766e"/><path d="M70 61v20M60 71h20" stroke="white" stroke-width="5" stroke-linecap="round"/><circle cx="105" cy="37" r="12" fill="#f4bf72"/><path d="m100 37 3 3 7-7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="mini-stat-grid"><div class="mini-stat"><b>Symptom insights</b><span>Dataset-based matches, not diagnosis</span></div><div class="mini-stat"><b>Care navigation</b><span>Specialist and clinic search</span></div><div class="mini-stat"><b>Activity guidance</b><span>Conservative, safety-first tips</span></div><div class="mini-stat"><b>Ayurveda context</b><span>Evidence and cautions explained</span></div></div>
+    </div>
+  </div>
+</section>
+<main class="container">
+  <div class="section-heading" id="checker"><div><div class="section-kicker">Start here</div><h2>Symptom checker</h2><p>Share only what is needed. Select the symptoms that best describe what you are experiencing.</p></div><span class="status-chip">● Demo · ML-assisted</span></div>
+  <div class="main-grid">
+    <section class="card card-pad">
+      <div class="card-title-row"><div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v4m8-4v4M5 8h14M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z"/><path d="M9 13h6m-3-3v6"/></svg></div><div><h3>Tell us how you feel</h3><p>Symptoms help the model find similar patterns in the supplied dataset.</p></div></div>
+      <form id="symptomForm">
+        <div class="form-section">
+          <div class="field-label"><label for="symptomSearch" style="margin:0">1. Choose symptoms</label><span class="optional">Select all that apply</span></div>
+          <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><input id="symptomSearch" type="search" placeholder="Search symptoms, e.g. headache or itching" autocomplete="off"></div>
+          <div id="symptomList" class="symptom-list">
+          {% for symptom in symptoms %}
+            <label class="symptom-option" data-symptom="{{ symptom }}"><input type="checkbox" name="symptoms" value="{{ symptom }}"><span>{{ symptom|replace('_',' ')|title }}</span></label>
+          {% endfor %}
+          </div>
+          <p class="field-help">If your exact symptom is not listed, describe it below using simple words that may match the dataset vocabulary.</p>
+        </div>
+        <div class="form-section">
+          <div class="field-label"><label for="freeText" style="margin:0">2. Add context</label><span class="optional">Optional</span></div>
+          <textarea id="freeText" placeholder="Example: symptoms started three days ago; discomfort increases when walking"></textarea>
+        </div>
+        <div class="form-section">
+          <div class="form-two">
+            <div><label class="field-label" for="bodyPart">Affected area</label><select id="bodyPart"><option>General</option><option>Knee / joints</option><option>Back / neck</option><option>Skin</option><option>Eye</option><option>Dental</option><option>Stomach</option><option>Head</option><option>Chest</option><option>Breathing</option><option>Other</option></select></div>
+            <div><label class="field-label" for="severity">Symptom severity</label><select id="severity"><option>Mild</option><option>Moderate</option><option>Severe</option></select></div>
+          </div>
+          <div class="form-two" style="margin-top:13px">
+            <div><label class="field-label" for="duration">Duration</label><select id="duration"><option>Started today</option><option>A few days</option><option>Several weeks</option><option>Months or longer</option></select></div>
+            <div><label class="field-label" for="location">City or PIN code</label><input type="text" id="location" value="Hazaribagh, Jharkhand" placeholder="e.g. Hazaribagh" required></div>
+          </div>
+        </div>
+        <div class="submit-row"><button class="btn btn-primary" type="submit" id="analyzeBtn">Review symptom matches <span aria-hidden="true">→</span></button><span class="submit-note">No diagnosis is made. Do not use this tool in an emergency.</span></div>
+        <div id="loadingState" role="status">Reviewing selected symptoms…</div>
+      </form>
+      <div id="results" class="results" aria-live="polite">
+        <div class="results-head"><div><div class="section-kicker">Your summary</div><h3>Guidance to discuss with a clinician</h3><p>Read all cautions before acting on any result.</p></div><span class="status-chip">RESULTS</span></div>
+        <div id="safety"></div>
+        <div class="notice safe"><b>Symptoms recognized by the dataset</b><div id="matched" style="margin-top:7px"></div></div>
+        <h4 style="margin:22px 0 4px;font-size:15px">Possible condition matches</h4><p class="field-help">Model scores describe the model's ranking only; they are not calibrated clinical probabilities.</p>
+        <div id="predictions"></div>
+        <div class="notice safe"><b>General activity guidance</b><p id="activity"></p></div>
+        <div class="notice"><b>Suggested type of specialist</b><p id="specialist"></p></div>
+        <p class="results-disclaimer" id="disclaimer"></p>
+        <div class="result-actions"><button class="btn btn-primary" id="doctorBtn" type="button">Find nearby care →</button><a class="btn btn-light" href="#local-care">Browse Hazaribagh directory</a></div>
+      </div>
+    </section>
+    <aside class="side-stack">
+      <section class="card safety-card"><div class="side-heading"><div class="side-icon">!</div><h3>Emergency safety comes first</h3></div><p class="side-copy">Seek emergency care for severe breathing difficulty, concerning chest pain, sudden one-sided weakness, fainting, seizure or uncontrolled bleeding. This keyword screen is incomplete and cannot rule out an emergency.</p><div class="emergency-call"><div><b>India emergency · 112</b><span>For life-threatening emergencies</span></div><a class="call-button" href="tel:112">Call 112</a></div></section>
+      <section class="card info-card" id="how-it-works"><div class="card-title-row"><div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.3 2.3 4.8-5"/></svg></div><div><h3>How to use your result</h3><p>Three simple principles for safer decisions.</p></div></div><div class="info-list"><div class="info-item"><div class="info-check">1</div><div><b>Use it as a starting point</b><p>Model matches can be wrong. A qualified clinician makes the diagnosis.</p></div></div><div class="info-item"><div class="info-check">2</div><div><b>Be careful with exercise</b><p>Do not push through pain or start injury-specific rehabilitation without assessment.</p></div></div><div class="info-item"><div class="info-check">3</div><div><b>Discuss Ayurveda safely</b><p>Evidence varies by condition. Herbs can interact with medicines or contain contaminants.</p></div></div></div></section>
+      <section class="card info-card"><div class="card-title-row"><div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11Z"/><path d="M8 12h8"/></svg></div><div><h3>Not a substitute for care</h3><p>For ongoing or worsening symptoms, arrange a medical assessment.</p></div></div><p class="field-help">Do not start or stop prescribed medicines based on this website. Dataset precautions are reference material, not personal medical advice.</p></section>
+    </aside>
+  </div>
+
+  <section class="directory" id="local-care">
+    <div class="directory-header"><div><div class="section-kicker">Local care navigation</div><h2>Find care around Hazaribagh</h2><p>Use these area shortcuts to explore hospitals, clinics and physiotherapy services. Listings can change; confirm address, specialty, credentials, hours and availability directly before visiting.</p></div><span class="status-chip">LOCAL DIRECTORY</span></div>
+    <div class="area-grid">
+      <article class="area-card"><span class="area-label">Hospital · District Board Chowk</span><h3>HZB Arogyam Superspeciality Hospital</h3><p>Search the hospital listing and confirm the relevant department and appointment details directly.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://hzbarogyam.in/">Website ↗</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=HZB+Arogyam+Superspeciality+Hospital+Hazaribagh">Map ↗</a></div></article>
+      <article class="area-card"><span class="area-label">Public hospital · New Area</span><h3>Sadar Hospital, Hazaribagh</h3><p>For public hospital information, check the district administration listing and current services.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://hazaribag.nic.in/public-utility/sadar-hospital/">District listing ↗</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sadar+Hospital+Hazaribagh">Map ↗</a></div></article>
+      <article class="area-card"><span class="area-label">Clinic · Mission School Road</span><h3>Carehands Clinics</h3><p>Explore the listing around New Forest Colony / Mission School Road; confirm current services before visiting.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Carehands+Clinics+Hazaribagh">View listing ↗</a></div></article>
+      <article class="area-card"><span class="area-label">Physiotherapy · Indrapuri Chowk</span><h3>Samarth Physiotherapy Centre</h3><p>Check the current listing and ask whether the service matches your assessed rehabilitation needs.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Samarth+Physiotherapy+Centre+Hazaribagh">View listing ↗</a></div></article>
+      <article class="area-card"><span class="area-label">Physiotherapy · Vinoba Nagar</span><h3>ASRP Physiotherapy</h3><p>Verify the provider, treatment scope and appointment details independently.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=ASRP+Physiotherapy+Hazaribagh">View listing ↗</a></div></article>
+      <article class="area-card"><span class="area-label">Hospital · Annada Chowk</span><h3>Hazaribag Nursing Home</h3><p>Explore local listing information and confirm the appropriate department before travelling.</p><div class="area-links"><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hazaribag+Nursing+Home+Annada+Chowk">View listing ↗</a></div></article>
+    </div>
+    <p class="directory-note">These are navigation shortcuts, not endorsements or verified referrals. Google Maps listings and provider details may be inaccurate or outdated. For nearby results in another area, use the symptom checker’s city/PIN field and clinic search.</p>
+  </section>
+  <section class="bottom-banner"><div><h3>Health information should help you ask better questions.</h3><p>Bring your symptoms, duration, medicines and questions to a qualified clinician. Do not delay urgent care while using this educational tool.</p></div><a class="btn" href="#checker">Return to symptom checker ↑</a></section>
+</main>
+<footer><div class="footer-inner"><div><div class="footer-brand">CareCompass AI</div><div style="font-size:10px;margin-top:5px">A healthcare education project</div></div><div class="footer-copy">This application is for educational purposes only and is not a medical device. Model matches are not diagnoses or validated medical probabilities. Ayurveda information is general and evidence-aware, not a prescription or proven cure. Always seek qualified medical advice; call 112 for a life-threatening emergency in India.</div></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+let lastSpecialist="General Physician";
+const symptomOptions=[...document.querySelectorAll(".symptom-option")];
+$("symptomSearch").addEventListener("input",()=>{
+ const q=$("symptomSearch").value.toLowerCase().trim();
+ symptomOptions.forEach(el=>{el.style.display=el.dataset.symptom.toLowerCase().includes(q)?"flex":"none";});
+});
+$("symptomForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const selected=[...document.querySelectorAll('input[name="symptoms"]:checked')].map(x=>x.value);
+ $("results").style.display="block";$("predictions").textContent="Analyzing selected symptoms…";$("safety").textContent="";$("loadingState").style.display="block";$("analyzeBtn").disabled=true;
+ try{
+  const r=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({symptoms:selected,free_text:$("freeText").value,body_part:$("bodyPart").value,severity:$("severity").value,duration:$("duration").value})});
+  const d=await r.json();if(!r.ok)throw new Error(d.error||"Analysis failed");
+  $("safety").innerHTML='<div class="notice '+(d.urgent?'danger':'warning')+'">'+esc(d.safety_message)+'</div>';
+  $("matched").innerHTML=(d.matched_symptoms||[]).map(s=>'<span class="tag">'+esc(s)+'</span>').join("");
+  $("predictions").innerHTML=(d.predictions||[]).map(p=>{
+   const precautions=(p.dataset_precautions||[]).length?'<div class="subpanel"><div class="subpanel-title">Dataset-listed precautions · reference only</div><p>'+p.dataset_precautions.map(esc).join(" · ")+'</p></div>':'';
+   const ay=p.ayurveda_guidance||{};
+   const diet=p.diet_guidance||{};
+   const dietPanel='<div class="subpanel diet"><div class="subpanel-title">Food & nutrition guidance</div><p><b>'+esc(diet.title||'General guidance')+'</b></p><p><b>Prefer / intake:</b> '+esc(diet.eat||'Choose a balanced diet and ask a clinician for advice.')+'</p><p><b>Limit / avoid:</b> '+esc(diet.limit||'Avoid known triggers and excess ultra-processed foods.')+'</p><p><b>Important:</b> '+esc(diet.caution||'This is general education, not a personal diet prescription.')+'</p><p class="field-help">These tips apply only if the condition is confirmed; model matches can be wrong.</p></div>';
+   const ayurveda='<div class="subpanel ayurveda"><div class="subpanel-title">✦ Ayurveda · evidence-aware context</div><p><b>Evidence:</b> '+esc(ay.evidence_label||'Evidence not assessed')+'</p><p>'+esc(ay.role||'Ask a qualified clinician before considering complementary care.')+'</p><p><b>Safer supportive options:</b> '+esc(ay.safer_support||'Discuss options with a clinician.')+'</p><p><b>Important cautions:</b> '+esc(ay.avoid||'Check safety and medicine interactions with a clinician or pharmacist.')+'</p><a target="_blank" rel="noopener" href="https://www.nccih.nih.gov/health/ayurvedic-medicine-in-depth">Read Ayurveda evidence overview ↗</a></div>';
+   const score=Number(p.model_score)||0;
+   return '<article class="condition"><div class="score-line"><span>MODEL MATCH '+(Number(p.model_score).toFixed(1))+'%</span><span>Not a clinical probability</span></div><div class="scorebar"><span style="width:'+Math.max(0,Math.min(100,score))+'%"></span></div><h4>'+esc(p.condition)+'</h4><p>'+esc(p.description)+'</p>'+precautions+dietPanel+ayurveda+'</article>';
+  }).join("");
+  $("activity").textContent=d.activity;$("specialist").textContent=d.specialist;$("disclaimer").textContent=d.disclaimer;lastSpecialist=d.specialist;
+ }catch(err){$("safety").innerHTML='<div class="notice danger">'+esc(err.message)+'</div>';$("predictions").textContent="";}
+ finally{$("loadingState").style.display="none";$("analyzeBtn").disabled=false;}
+ $("results").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("doctorBtn").addEventListener("click",async()=>{
+ const section=$("local-care");section.scrollIntoView({behavior:"smooth",block:"start"});
+ const resultActions=document.querySelector(".result-actions");
+ let status=document.getElementById("doctorSearchStatus");
+ if(!status){status=document.createElement("p");status.id="doctorSearchStatus";status.className="field-help";resultActions.after(status);}
+ status.textContent="Searching for local listings…";
+ try{
+  const r=await fetch("/api/doctors",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({location:$("location").value,specialist:lastSpecialist})});
+  const d=await r.json();
+  if(d.results&&d.results.length){
+   status.innerHTML='<b>Live results for '+esc(lastSpecialist)+' near '+esc($("location").value)+':</b>';
+   const box=document.createElement("div");box.className="area-grid";box.style.marginTop="12px";
+   box.innerHTML=d.results.map(p=>'<article class="area-card"><span class="area-label">LIVE PLACE LISTING</span><h3>'+esc(p.name)+'</h3><p>'+esc(p.address)+'</p>'+(p.rating?'<p>Google rating: '+esc(p.rating)+'</p>':'')+'<div class="area-links">'+(p.phone?'<a href="tel:'+esc(p.phone)+'">Call ↗</a>':'')+(p.website?'<a target="_blank" rel="noopener" href="'+esc(p.website)+'">Website ↗</a>':'')+(p.maps?'<a target="_blank" rel="noopener" href="'+esc(p.maps)+'">Map ↗</a>':'')+'</div><p class="directory-note">Verify credentials and availability directly.</p></article>').join("");
+   let live=document.getElementById("liveDoctorResults");if(!live){live=document.createElement("div");live.id="liveDoctorResults";resultActions.after(live);}live.innerHTML="";live.appendChild(box);
+  }else if(d.fallback){status.innerHTML=esc(d.message||d.error||"No live API results.")+ ' <a target="_blank" rel="noopener" href="'+esc(d.fallback)+'">Open Google Maps search ↗</a>';}
+  else{status.textContent=d.error||"No listings found. Try another city.";}
+ }catch(err){status.textContent="Doctor search failed: "+err.message;}
+});
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+</script>
+</body>
+</html>
